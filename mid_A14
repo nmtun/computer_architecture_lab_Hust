@@ -1,0 +1,75 @@
+.data
+msg_1: .asciiz "Nhap so thu nhat: "
+msg_2: .asciiz "Nhap so thu hai: "
+msg_3: .asciiz "BCNN cua hai so la: "
+.text
+main:
+	# in msg_1
+	li $v0, 4
+	la $a0, msg_1
+	syscall
+	# nhap so thu nhat
+	li $v0, 5
+	syscall
+	move $s0, $v0
+	# in msg_2
+	li $v0, 4
+	la $a0, msg_2
+	syscall
+	# nhap so thu hai
+	li $v0, 5
+	syscall
+	move $s1, $v0
+	
+	move $a0, $s0
+	move $a1, $s1
+	jal bcnn
+	nop
+	# in msg_3
+	li $v0, 4
+	la $a0, msg_3
+	syscall
+	# in kq
+	li $v0, 1
+	move $a0, $t0
+	syscall
+	
+	li $a0, 10
+	syscall
+bcnn: 
+	#luu $ra
+	sub $sp, $sp, 4
+    	sw $ra, 0($sp)
+    	
+    	move $t0, $a0		# t1=m
+    	move $t1, $a1		# t2=n
+    	mul $t0, $t0, $t1	# t0=m*n
+loop:
+	beq $t0, $zero, end	# if t0=0 -> end
+	move $t2, $t1		# t2=t1
+	div $t1, $t0		# phan du cua tich/n
+	mfhi $t1 		# t1= phan du
+	move $t0, $t1		# t0=n
+	j loop 
+end: 
+	move $t0, $t2	
+
+    	div $a0, $t0       # Chia M cho ước chung lớn nhất
+    	mflo $t3           # Lưu kết quả vào $t3
+    	mul $t0, $t3, $a1  # Nhân kết quả với N để tính LCM
+
+    	# Khôi phục $ra
+    	lw $ra, 0($sp)
+    	add $sp, $sp, 4
+
+    	jr $ra             # Trả về ra địa chỉ gọi
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

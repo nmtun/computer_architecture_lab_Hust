@@ -1,0 +1,96 @@
+.data
+A: .space 256
+msg_1: .asciiz "Nhap n (n < 64): "	# n la so ptu  
+msg_2: .asciiz "Nhap ptu: "
+msg_3: .asciiz "Ket qua la tich cua: "
+msg_4: .asciiz " and "
+msg_5: .asciiz "Khong ton tai cap phan tu lien ke."
+nl: .asciiz "\n"
+
+.text
+main: 
+    li $v0, 4   
+    la $a0, msg_1  
+    syscall
+    li $v0, 5   # nhap ptu
+    syscall
+    move $t0, $v0   
+    li $t1, 0   # i = 0
+    la $t2, A   # load adress of A to $t2
+
+    # Kiểm tra điều kiện n == 0
+    beq $t0, $zero, end_print
+
+insert: 
+    beq $t1, $t0, find   # Nhap du -> nhay den find
+    add $t4, $t1, $t1   # $t4 = 2 * i
+    add $t4, $t4, $t4   # $t4 = 4 * i
+    add $t4, $t4, $t2   # $t4 = 4i + A[0]
+    li $v0, 4   
+    la $a0, msg_2   # nhap cac ptu 
+    syscall
+    li $v0, 5   
+    syscall
+    sw $v0, ($t4)   # luu cac ptu vao A
+    addi $t1, $t1, 1    # i++
+    j insert    
+    
+find:
+    li $t1, 0   # i = 0
+    la $t2, A   # load adress of A to $t2
+    li $t5, -999999 # $t5 = tich max
+    li $t6, 0   # the first index 
+    li $t7, 0   # the second index
+
+loop:
+    addi $t4, $t2, 4    # $t4 = $t2 + 4
+    lw $t8, ($t2)   # load ptu i cua A -> $t8
+    lw $t9, ($t4)   # load ptu i + 1 cua A -> $t9
+    mul $s1, $t8, $t9 # $s1=$t8*$t9
+    bgt $s1, $t5, update # if max > $s1 -> update
+    addi $t1, $t1, 1    # i++
+    addi $t2, $t2, 4    
+    j loop 
+
+update:
+    move $t5, $s1  # $t5=max
+    move $t6, $t1   # luu lai chi so ptu thu nhat
+    addi $t1, $t1, 1    # i+1
+    move $t7, $t1   # luu lai chi so ptu thu hai 
+    j print 
+print:
+    # in msg_3
+    li $v0, 4   
+    la $a0, msg_3   
+    syscall
+
+    # Kiểm tra xem cặp phần tử có tồn tại không
+    blt $t6, $t0, end_print # nếu chỉ số phần tử thứ nhất không nằm trong khoảng từ 0 đến n-1, thoát khỏi hàm in
+    blt $t7, $t0, end_print # nếu chỉ số phần tử thứ hai không nằm trong khoảng từ 0 đến n-1, thoát khỏi hàm in
+
+    # in ra ptu thu nhat
+    li $v0, 1   
+    lw $a0, ($t6)   # Load pt tu A vao $a0
+    syscall
+    # in msg_4
+    li $v0, 4   
+    la $a0, msg_4
+    syscall
+    # in ra ptu thu hai 
+    li $v0, 1   
+    lw $a0, ($t7)   # Load ptu tu A vao $a0
+    syscall
+
+end_print:
+    # Kiểm tra xem có phải không có cặp phần tử nào
+    li $v0, 4   
+    la $a0, msg_5
+    syscall
+
+    # In dòng xuống
+    li $v0, 4   
+    la $a0, nl  
+    syscall
+
+    li $v0, 10  
+    syscall
