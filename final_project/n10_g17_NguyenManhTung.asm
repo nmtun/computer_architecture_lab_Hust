@@ -3,7 +3,7 @@
 # B1: Run code
 # B2: Mở Digital Lab Sim và kết nối với MIPS
 # B3: Thực hiện tính toán
-# Lưu ý: 'a'='+'; 'b'='-'; 'c'='*'; 'd'='/'; 'e'='%'; 'f'='='
+# Lưu ý: 'a' = '+'; 'b' = '-'; 'c' = '*'; 'd' = '/'; 'e' = '%'; 'f' = '='
 #===========================================================================================
 
 .eqv	SEVENSEG_LEFT	0xFFFF0011	# Dia chi LED trai				
