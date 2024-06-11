@@ -1,3 +1,11 @@
+#===========================================================================================
+# Chương trình máy tính bỏ túi
+# B1: Run code
+# B2: Mở Digital Lab Sim và kết nối với MIPS
+# B3: Thực hiện tính toán
+# Lưu ý: 'a'='+'; 'b'='-'; 'c'='*'; 'd'='/'; 'e'='%'; 'f'='='
+#===========================================================================================
+
 .eqv	SEVENSEG_LEFT	0xFFFF0011	# Dia chi LED trai				
 .eqv	SEVENSEG_RIGHT	0xFFFF0010	# Dia chi LED phai 
 .eqv 	IN_ADDRESS_HEXA_KEYBOARD 	0xFFFF0012
